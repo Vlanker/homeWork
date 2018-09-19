@@ -27,11 +27,11 @@ implementation
 
 procedure TForm1.FormCreate(Sender: TObject);
 var
-  i, j, sum, max : Integer;
-  iter : Integer;
-  iMax : array[1..6] of Integer;
+  i, j, max,iter: Integer
   arr: array[1..4, 1..6] of Integer;
   sortArr: array[1..6] of Integer;
+  iMax : array[1..6] of Integer;
+  work: array[1..6] of Integer;
   strOut: string;
 begin
   // первое задание
@@ -59,28 +59,37 @@ begin
 
   strOut := '   * ';
   max := -1;
-  iter := 1;
   for j := 1 to 6 do
   begin
-    sum := 0;
+    work[j] := 1;
     for i := 1 to 4 do
     begin
-      sum := sum + arr[i, j];
+      work[j] := sum[j] * arr[i, j];
     end;
-    if sum >= max then
+    if work[j] >= max then
     begin
-        max := sum;
-        iter
+        max := work[j];    
     end;
 
-    strOut := strOut + IntToStr(sum) + ' ';
+    strOut := strOut + IntToStr(work[j]) + ' ';
   end;
   mOutput.Lines.Add(strOut+ '*');
+  
+  iter := 1;
+  for i := 1 to 6 do
+  begin
+    if work[i] = max then
+    begin
+        iMax[iter] := i;
+        iter := iter + 1;
+    end;
+  end;
 
   //третье занание
   strOut := '';
   for i := 1 to iter do
     strOut := strOut + IntToStr(iMax[i]) + '; ';
+    
   mOutput.Lines.Add('------------------------------------------------');
   mOutput.Lines.Add('----------------------------------------------------------------'
                     + #13#10
@@ -97,10 +106,10 @@ begin
 
    //четвёртое задание
 
-//   for i := 1 to 6 do
-//   begin
-//      sortArr[i] := arr[1, i];
-//   end;
+   for i := 1 to 6 do
+   begin
+      sortArr[i] := arr[1, i];
+   end;
     //sort
 //   strOut := '';
 //   for i := 1 to 6 do
