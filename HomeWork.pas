@@ -27,11 +27,11 @@ implementation
 
 procedure TForm1.FormCreate(Sender: TObject);
 var
-  i, j, max,iter: Integer
+  i, j, iter, max : Integer;
+  op : array[1..6] of Integer;
+  iMax : array[1..6] of Integer;
   arr: array[1..4, 1..6] of Integer;
   sortArr: array[1..6] of Integer;
-  iMax : array[1..6] of Integer;
-  work: array[1..6] of Integer;
   strOut: string;
 begin
   // первое задание
@@ -47,104 +47,93 @@ begin
       mOutput.Lines.Add(strOut + #13#10);
   end;
 
-  // второе задание
-  mOutput.Lines.Add('--------------------------------------------------'
+  // второе и третье задание
+  mOutput.Lines.Add('------------------------------------------------------------------------------'
                     + #13#10
                     + '-Произведения по столбцам:-'
                     + #13#10
-                    + '_________________________');
+                    + '_______________________________________');
   mOutput.Lines.Add('   -номера столбцов:-');
-  mOutput.Lines.Add('   *   1   2   3   4   5   6 *');
-  mOutput.Lines.Add('   *===============*');
+  mOutput.Lines.Add('   *   1    2    3    4    5    6*');
+  mOutput.Lines.Add('   ======================');
 
-  strOut := '   * ';
+  strOut := '   *';
   max := -1;
   for j := 1 to 6 do
   begin
-    work[j] := 1;
-    for i := 1 to 4 do
-    begin
-      work[j] := sum[j] * arr[i, j];
-    end;
-    if work[j] >= max then
-    begin
-        max := work[j];    
-    end;
+      op[j] := arr[1, j];
+      for i:= 2 to 4 do
+         op[j] := op[j] * arr[i, j];
 
-    strOut := strOut + IntToStr(work[j]) + ' ';
+      if op[j] > max then
+         max := op[j];
+
+      strOut := strOut + IntToStr(op[j]) + ' ';
   end;
-  mOutput.Lines.Add(strOut+ '*');
-  
+
+  mOutput.Lines.Add(strOut);
+  strOut := '';
   iter := 1;
   for i := 1 to 6 do
-  begin
-    if work[i] = max then
-    begin
+     if op[i] = max then
+     begin
         iMax[iter] := i;
+        strOut := strOut + IntToStr(iMax[iter]) + '; ';
         iter := iter + 1;
-    end;
-  end;
 
-  //третье занание
-  strOut := '';
-  for i := 1 to iter do
-    strOut := strOut + IntToStr(iMax[i]) + '; ';
-    
-  mOutput.Lines.Add('------------------------------------------------');
-  mOutput.Lines.Add('----------------------------------------------------------------'
+     end;
+  mOutput.Lines.Add('   *-------------------------------*'
                     + #13#10
-                    + 'Номер столбца(-ов) с макс. значением: '
+                    + '   *Номер столбца(-ов) с макс. значением: '
                     + strOut
                     + #13#10
-                    + 'Его(их) значение: '
+                    + '   *Максимальное значение: '
                     + IntToStr(max)
                     + #13#10
-                    + '________________________________'
+                    + '_______________________________________'
                     + #13#10
-                    + '----------------------------------------------------------------');
+                    + '------------------------------------------------------------------------------');
 
 
    //четвёртое задание
-
-   for i := 1 to 6 do
-   begin
-      sortArr[i] := arr[1, i];
-   end;
-    //sort
-//   strOut := '';
-//   for i := 1 to 6 do
-//   begin
- //     iter := i;
-//      max := sortArr[i];
-//
-//      for j := i + 1 to 6 do
-//        if (sortArr[i] > sortArr[j]) and (max > sortArr[j]) then
-//        begin
-//          iter := j;
-//          max := sortArr[j];
-//
-//        end;
-//
-//      if i = iter then Continue;
-//
-//      sortArr[iter] := sortArr[i];
-//      sortArr[i] := max;
- //     strOut := strOut + ' ' + strArr[i];
- //  end;
-  //    mOutput.Lines.Add(strOut);
-     // strOut := '';
+  mOutput.Lines.Add('---------------------------------------------------------------------------------------------------'
+                    + #13#10
+                    + '-Отсортированная первая сторока массива по убыванию:-'
+                    + #13#10
+                    + '__________________________________________________');
 
 
-   //j:= Length(sortArr);
-  // for i := 1 to 6 do
-  // begin
-  //    max := sortArr[j - i + 1];
- //     sortArr[j - i + 1] := sortArr[i];
- //     sortArr[i] := max;
-//      strOut := strOut + ' ' + IntToStr(sortArr[i]) + ' ';
-//   end;
-//   mOutput.Lines.Add(strOut);
+  for i := 1 to 6 do
+  begin
+     sortArr[i] := arr[1, i];
+  end;
 
+  //sort and invert
+
+  for i := 1 to 5 do
+  begin
+    max := sortArr[i];
+    iter := i;
+    for j := i + 1 to 6 do
+    begin
+      if max < sortArr[j] then
+      begin
+        max := sortArr[j];
+        iter := j;
+      end;
+    end;
+
+    if (max = sortArr[i]) and (iter = i) then
+      Continue;
+    //swich
+    sortArr[iter] := sortArr[i];
+    sortArr[i] := max;
+  end;
+
+  strOut := '';
+  for i := 1 to 6 do
+    strOut := strOut + IntToStr(sortArr[i]) + ' ';
+  mOutput.Lines.Add(strOut);
 
 end;
 
