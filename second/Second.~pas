@@ -14,6 +14,8 @@ type
     { Public declarations }
   end;
 
+  TAutomobile = class;
+  
 var
   Form1: TForm1;
 
