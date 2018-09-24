@@ -70,7 +70,7 @@ begin
   self.ColorCoachbuilder := ColorCoachbuilder;
   IsStarterEngine := false;
 
-  ShowMessage('Aotomobile Create: Engine-' +   GetEngine(Engine)+
+  ShowMessage('Aotomobile Create: Engine-' + GetEnumName(TypeInfo(Engine),integer(Engine))+
               '; Coachbuilder-'+Coachbuilder +
               'Chassis-' + IntToStr(Chassis) +
               '; Color Coachbuilder-' + ColorCoachbuilder);
