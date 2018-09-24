@@ -2,7 +2,7 @@ object Form1: TForm1
   Left = 192
   Top = 124
   Width = 339
-  Height = 571
+  Height = 370
   Caption = 'Form1'
   Color = clBtnFace
   Font.Charset = DEFAULT_CHARSET
@@ -18,7 +18,7 @@ object Form1: TForm1
     Left = 0
     Top = 0
     Width = 321
-    Height = 529
+    Height = 329
     TabOrder = 0
   end
 end

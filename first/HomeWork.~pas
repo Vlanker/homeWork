@@ -105,11 +105,11 @@ begin
 
   for i := 1 to 6 do
   begin
-     sortArr[i] := arr[i, 1];
+     sortArr[i] := arr[1, i];
   end;
 
   //sort and invert
-  strOut := '';
+
   for i := 1 to 5 do
   begin
     max := sortArr[i];
@@ -122,11 +122,17 @@ begin
         iter := j;
       end;
     end;
+
+    if (max = sortArr[i]) and (iter = i) then
+      Continue;
     //swich
     sortArr[iter] := sortArr[i];
     sortArr[i] := max;
-    strOut := strOut + IntToStr(sortArr[i])+ ' ';
   end;
+
+  strOut := '';
+  for i := 1 to 6 do
+    strOut := strOut + IntToStr(sortArr[i]) + ' ';
   mOutput.Lines.Add(strOut);
 
 end;

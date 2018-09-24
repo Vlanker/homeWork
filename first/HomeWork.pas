@@ -35,12 +35,12 @@ var
   strOut: string;
 begin
   // первое задание
+  Randomize;
   for i := 1 to 4 do
   begin
   strOut := ' ';
     for j := 1 to 6 do
       begin
-          Randomize;
           arr[i, j] := random(10);
           strOut := strOut + IntToStr(arr[i,j]) + '  ';
       end;
@@ -79,8 +79,7 @@ begin
      begin
         iMax[iter] := i;
         strOut := strOut + IntToStr(iMax[iter]) + '; ';
-        iter := iter + 1;
-
+        Inc(iter);
      end;
   mOutput.Lines.Add('   *-------------------------------*'
                     + #13#10
