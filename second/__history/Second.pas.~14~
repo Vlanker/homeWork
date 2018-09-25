@@ -85,7 +85,7 @@ begin
   self.Coachbuilder := Coachbuilder;
   self.Chassis := Chassis;
 
-  ShowMessage('Создан Автомобиль: Двигатель-' + Engine +
+  ShowMessage('Создан Автомобиль: Двигатель-' + Engine+
               '; Кузов-' + Coachbuilder +
               '; Шасси-' + IntToStr(Chassis));
 end;
@@ -122,7 +122,7 @@ end;
 
 function TAutomobile.StartStopEngine(): Boolean;
 begin
-  if Not(IsStarterEngine) then
+  if Not(Automobile.IsStarterEngine) then
   begin
   //start
     IsStarterEngine := true;
@@ -149,20 +149,20 @@ end;
 
 function TAutomobile.MoveAutomobile(): Boolean;
 begin
-  if Not(IsStarterEngine) then
+  if Not(Automobile.IsStarterEngine) then
   begin
     ShowMessage('Не может двигаться! Запустить Двигатель');
     Result := false;
   end;
 
-  if IsStarterEngine and Not(IsMoved) then
+  if Automobile.IsStarterEngine and Not(Automobile.IsMoved) then
   begin
     ShowMessage('Автомобиль Движется!');
     IsMoved := true;
     Result := true;
   end
   else
-    if IsStarterEngine and IsMoved then
+    if Automobile.IsStarterEngine and Automobile.IsMoved then
     begin
       ShowMessage('Автомобиль Остановлен!');
       IsMoved := false;
@@ -173,7 +173,7 @@ end;
 
 procedure TForm1.BtnStartStopEngineClick(Sender: TObject);
 begin
-  if Automobile.StartStopEngine() or Truck.StartStopEngine() then
+  if Automobile.StartStopEngine() then
     BtnStartStopEngine.Caption := 'Остановить Двигатель'
   else
      BtnStartStopEngine.Caption := 'Запустить Двигатель';
@@ -181,7 +181,7 @@ end;
 
 procedure TForm1.BtnCreateTruckClick(Sender: TObject);
 begin
-     Truck := TTruck.Create('Дизельный мотор','Кабина', 6, 'Прицеп 10 000');
+     Truck := TTruck.Create('Дизельный мотор','Кабина', 6,'Прицеп 10 000');
 
      Truck.IsStarterEngine := false;
      Truck.IsMoved := false;
@@ -241,7 +241,7 @@ end;
 
 procedure TForm1.BtnMoveClick(Sender: TObject);
 begin
-  if Automobile.MoveAutomobile() or Truck.MoveAutomobile() then
+  if Automobile.MoveAutomobile() then
     BtnMove.Caption := 'Остановиться'
   else
      BtnMove.Caption := 'Двигаться';
@@ -249,15 +249,15 @@ end;
 
 function TAutomobile.OnOffHeadlight: Boolean;
 begin
-  if Not(Automobile.Headlight)  or Not(Truck.Headlight) then
+  if Not(Automobile.Headlight) then
   begin
-    Headlight := true;
+    Automobile.Headlight := true;
     ShowMessage('Фары включены');
     Result := true;
   end
   else
   begin
-    Headlight := false;
+    Automobile.Headlight := false;
     ShowMessage('Фары выключены');
     Result := false;
   end;
@@ -279,8 +279,7 @@ begin
   inherited Create(Engine, Coachbuilder, Chassis);
 
   self.Trailer := Trailer;
-
-  ShowMessage('Создан Грузовик: Двигатель-' + Engine +
+  ShowMessage('Создан Грузовик: Двигатель-' + Engine+
               '; Кузов-' + Coachbuilder +
               '; Шасси-' + IntToStr(Chassis) +
               '; Прицеп-' + Trailer);
@@ -289,28 +288,27 @@ end;
 function TTruck.LoadUnloadTrailer: Boolean;
 begin
   if Not(IsLoaded) and Not(IsStarterEngine) and Not(IsMoved) then
-  begin
-    IsLoaded := true;
-    ShowMessage('Прицеп загружен');
-    Result := true;
-  end
-  else
-  if IsLoaded and Not(IsStarterEngine) and Not(IsMoved) then
+    begin
+      IsLoaded := true;
+      ShowMessage('Прицеп загружен');
+      Result := true;
+    end
+  else if IsLoaded and Not(IsStarterEngine) and Not(IsMoved) then
   begin
     IsLoaded := false;
     ShowMessage('Прицеп разгружен');
     Result := false;
+  end
+  else if IsStarterEngine then
+  begin
+    ShowMessage('Заглушите Двигатель');
+    Result := false;
+  end
+  else if IsMoved then
+  begin
+    ShowMessage('Остановите Транспорт');
+    Result := false;
   end;
-//  else if IsStarterEngine then
-//  begin
-//    ShowMessage('Заглушите Двигатель');
-//    Result := false;
-//  end
-//  else if IsMoved then
-//  begin
-//    ShowMessage('Остановите Транспорт');
-//    Result := false;
-//  end;
 
 
 end;
