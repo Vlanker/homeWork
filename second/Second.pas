@@ -4,54 +4,59 @@ interface
 
 uses
   Windows, Messages, SysUtils, Variants, Classes, Graphics, Controls, Forms,
-  Dialogs, Vcl.StdCtrls;
+  Dialogs, StdCtrls;//, Vcl.StdCtrls, StdCtrls;
 
 type
 
   TForm1 = class(TForm)
-    Button1: TButton;
-    Button2: TButton;
-    Button3: TButton;
+    BtnCreate: TButton;
+    BtnStartStopEngine: TButton;
+    BtnMove: TButton;
+    BtnHeadlight: TButton;
+    procedure BtnStartStopEngineClick(Sender: TObject);
+    procedure BtnCreateClick(Sender: TObject);
+    procedure BtnMoveClick(Sender: TObject);
+    procedure BtnHeadlightClick(Sender: TObject);
   private
     { Private declarations }
   public
     { Public declarations }
   end;
 
-  TEngine = (DIESEL, TURBO_DIESEL, ELECTRIC_MOTOR, HIBRID);
-  TColorCoachbuilder = (WHITE, BLACK, RED, GREEN, BLUE);
-  TCoachbuilder = (TRUCK, CAR, WAGGON, OFF_ROAD, BUS);
-  TChassis = (FOUR, SIX, EIGHT, TEN);
-
   TAutomobile = class
   private
-    function GetEngine: TEngine;
+    Engine : String;
+    Coachbuilder : String;
+    Chassis : Integer;
+
+    function GetEngine: String;
+    procedure SetEngine(const Value: String);
     function GetCoachbuilder: String;
-    function GetChassis: Integer;
-    function GetColorCoachbuilder: String;
-    procedure SetEngine(const Value: TEngine);
     procedure SetCoachbuilder(const Value: String);
+    function GetChassis: Integer;
     procedure SetChassis(const Value: Integer);
-    procedure SetColorCoachbuilder(const Value: String);
-
   public
-    IsStarterEngine : Boolean;
-    property Engine: TEngine read GetEngine write SetEngine;
-    property Coachbuilder: String read GetCoachbuilder
-                                            write SetCoachbuilder;
-    property Chassis: Integer read GetChassis write SetChassis;
-    property ColorCoachbuilder: String read GetColorCoachbuilder
-                                                 write SetColorCoachbuilder;
+    IsStarterEngine, IsMoved, Headlight: Boolean;
+    property Engines: String read GetEngine
+                             write SetEngine;
+    property Coachbuilders: String read GetCoachbuilder
+                                   write SetCoachbuilder;
+    property Chassiss: Integer read GetChassis
+                               write SetChassis;
+    constructor Create(Engine: String;
+                       Coachbuilder: String;
+                       Chassis: Integer); overload;
 
-    constructor Create(Engine: TEngine; Coachbuilder: String; Chassis: Integer; ColorCoachbuilder: String); overload;
-
-    function SetStartStopEngine(const Value: Boolean) : Boolean; 
-    function MoveAutomobile() : Boolean;  
+    function StartStopEngine() : Boolean;
+    function MoveAutomobile() : Boolean;
+    function OnOffHeadlight() : Boolean;
   end;
-
 
 var
   Form1: TForm1;
+
+  Automobile : TAutomobile = nil;
+
 
 implementation
 
@@ -60,20 +65,15 @@ implementation
 
 { TAutomobile }
 
-constructor TAutomobile.Create(Engine: TEngine; Coachbuilder: String;
-  Chassis: Integer; ColorCoachbuilder: String);
+constructor TAutomobile.Create(Engine: String; Coachbuilder: String; Chassis: Integer);
 begin
-  inherited Create;
   self.Engine := Engine;
   self.Coachbuilder := Coachbuilder;
   self.Chassis := Chassis;
-  self.ColorCoachbuilder := ColorCoachbuilder;
-  IsStarterEngine := false;
 
-  ShowMessage('Aotomobile Create: Engine-' +   GetEngine(Engine)+
-              '; Coachbuilder-'+Coachbuilder +
-              'Chassis-' + IntToStr(Chassis) +
-              '; Color Coachbuilder-' + ColorCoachbuilder);
+  ShowMessage('Создан Автомобиль: Двигатель-' + Engine+
+              '; Кузов-'+Coachbuilder +
+              '; Шасси-' + IntToStr(Chassis));
 end;
 
 function TAutomobile.GetChassis: Integer;
@@ -81,26 +81,14 @@ begin
   Result := Chassis;
 end;
 
-function TAutomobile.GetCoachbuilder: String;
-begin
-  Result := ColorCoachbuilder;
-end;
-
-function TAutomobile.GetColorCoachbuilder: String;
-begin
-  Result := ColorCoachbuilder;
-end;
-
-function TAutomobile.GetEngine: TEngine;
-begin
-  Result := Engine;
-end;
-
-
-
 procedure TAutomobile.SetChassis(const Value: Integer);
 begin
   Chassis := Value;
+end;
+
+function TAutomobile.GetCoachbuilder: String;
+begin
+  Result := Coachbuilder;
 end;
 
 procedure TAutomobile.SetCoachbuilder(const Value: String);
@@ -108,40 +96,119 @@ begin
   Coachbuilder := Value;
 end;
 
-procedure TAutomobile.SetColorCoachbuilder(const Value: String);
+function TAutomobile.GetEngine: String;
 begin
-  ColorCoachbuilder := Value;
+  Result := Engine;
 end;
 
-procedure TAutomobile.SetEngine(const Value: TEngine);
+procedure TAutomobile.SetEngine(const Value: String);
 begin
   Engine := Value;
 end;
 
-
-function TAutomobile.SetStartStopEngine(const Value: Boolean): Boolean;
+function TAutomobile.StartStopEngine(): Boolean;
 begin
-  if Value then
+  if Not(Automobile.IsStarterEngine) then
   begin
+  //start
     IsStarterEngine := true;
-    ShowMessage('Engine Started!');
+    ShowMessage('Двигатель Запущен!');
     Result :=  true;
+  end
+  else
+  begin
+    if IsMoved then
+    begin
+      ShowMessage('Остановите Автомобиль');
+      Result := true;
+    end
+    else
+    begin
+    //stop
+      IsStarterEngine := false;
+      ShowMessage('Двигатель Остановлен!');
+      Result := false;
+    end;
   end;
-  
-  IsStarterEngine := false;
-  ShowMessage('Engine Stoped!');
-  Result := false;
+
 end;
 
 function TAutomobile.MoveAutomobile(): Boolean;
 begin
-   if IsStarterEngine then
-   begin
-     ShowMessage('Automobile move!');
-     Result := true;
-   end;
-   ShowMessage('Can#39t move! Start Engine');
+  if Not(Automobile.IsStarterEngine) then
+  begin
+    ShowMessage('Не может двигаться! Запустить Двигатель');
+    Result := false;
+  end;
 
+  if Automobile.IsStarterEngine and Not(Automobile.IsMoved) then
+  begin
+    ShowMessage('Автомобиль Движется!');
+    IsMoved := true;
+    Result := true;
+  end
+  else
+    if Automobile.IsStarterEngine and Automobile.IsMoved then
+    begin
+      ShowMessage('Автомобиль Остановлен!');
+      IsMoved := false;
+      Result := false;
+    end;
+
+end;
+
+procedure TForm1.BtnStartStopEngineClick(Sender: TObject);
+begin
+  if Automobile.StartStopEngine() then
+    BtnStartStopEngine.Caption := 'Остановить Двигатель'
+  else
+     BtnStartStopEngine.Caption := 'Запустить Двигатель';
+end;
+
+procedure TForm1.BtnCreateClick(Sender: TObject);
+begin
+    Automobile := TAutomobile.Create('Мотор', 'Кузов', 4);
+    Automobile.IsStarterEngine := false;
+    Automobile.IsMoved := false;
+    Automobile.Headlight := false;
+    BtnCreate.Caption := 'Автомобиль Создан';
+    
+    BtnCreate.Enabled := false;
+    BtnStartStopEngine.Enabled := true;
+    BtnMove.Enabled := true;
+    BtnHeadlight.Enabled := true;
+end;
+
+procedure TForm1.BtnMoveClick(Sender: TObject);
+begin
+  if Automobile.MoveAutomobile() then
+    BtnMove.Caption := 'Остановиться'
+  else
+     BtnMove.Caption := 'Двигаться';
+end;
+
+function TAutomobile.OnOffHeadlight: Boolean;
+begin
+  if Not(Automobile.Headlight) then
+  begin
+    Automobile.Headlight := true;
+    ShowMessage('Фары включены');
+    Result := true;
+  end
+  else
+  begin
+    Automobile.Headlight := false;
+    ShowMessage('Фары выключены');
+    Result := false;
+  end;
+end;
+
+procedure TForm1.BtnHeadlightClick(Sender: TObject);
+begin
+   if Automobile.OnOffHeadlight then
+      BtnHeadlight.Caption := 'Потушить Фары'
+   else
+      BtnHeadlight.Caption := 'Зажечь Фары';
 end;
 
 end.
