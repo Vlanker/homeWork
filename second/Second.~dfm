@@ -2,7 +2,7 @@ object Form1: TForm1
   Left = 193
   Top = 137
   Width = 484
-  Height = 175
+  Height = 174
   Caption = 'Form1'
   Color = clBtnFace
   Font.Charset = DEFAULT_CHARSET
@@ -51,5 +51,23 @@ object Form1: TForm1
     Enabled = False
     TabOrder = 3
     OnClick = BtnHeadlightClick
+  end
+  object BtnCreateTruck: TButton
+    Left = 144
+    Top = 8
+    Width = 105
+    Height = 25
+    Caption = #1057#1086#1079#1076#1072#1090#1100' '#1043#1088#1091#1079#1086#1074#1080#1082
+    TabOrder = 4
+    OnClick = BtnCreateTruckClick
+  end
+  object BtnLoadUnloadTrailer: TButton
+    Left = 160
+    Top = 39
+    Width = 105
+    Height = 25
+    Caption = #1047#1072#1075#1088#1091#1079#1080#1090#1100' '#1055#1088#1080#1094#1077#1087
+    Enabled = False
+    TabOrder = 5
   end
 end

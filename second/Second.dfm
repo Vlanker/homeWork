@@ -1,9 +1,9 @@
 object Form1: TForm1
   Left = 193
   Top = 137
+  Width = 484
+  Height = 174
   Caption = 'Form1'
-  ClientHeight = 136
-  ClientWidth = 468
   Color = clBtnFace
   Font.Charset = DEFAULT_CHARSET
   Font.Color = clWindowText
@@ -53,7 +53,7 @@ object Form1: TForm1
     OnClick = BtnHeadlightClick
   end
   object BtnCreateTruck: TButton
-    Left = 144
+    Left = 168
     Top = 8
     Width = 105
     Height = 25
@@ -62,7 +62,7 @@ object Form1: TForm1
     OnClick = BtnCreateTruckClick
   end
   object BtnLoadUnloadTrailer: TButton
-    Left = 160
+    Left = 176
     Top = 39
     Width = 105
     Height = 25
