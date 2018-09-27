@@ -1,4 +1,4 @@
-unit Second;
+п»їunit Second;
 
 interface
 
@@ -25,17 +25,17 @@ type
 
   { ICar Interface}
   ICar = Interface(IInterface)
-   //мотоды доступа к полям
+   //РјРѕС‚РѕРґС‹ РґРѕСЃС‚СѓРїР° Рє РїРѕР»СЏРј
     function GetFirm   : String;
     function GetModel  : String;
     function GetEngine : String;
     function GetBody   : String;
-    //4 поля
+    //4 РїРѕР»СЏ
     property firm   : String read GetFirm;
     property model  : String read GetFirm;
     property engine : String read GetEngine;
     property body   : String read GetBody;
-    //3 метода
+    //3 РјРµС‚РѕРґР°
     function GetEngineRotation() : Boolean;
     function GetMove()           : Boolean;
 
@@ -69,17 +69,17 @@ type
 
     procedure SetHeadlight(const Value: Boolean);
 
-    constructor Create(); overload;
+    constructor Create(firm, model, engine, body: String);
   end;
 
   TBygatti = Class(TInterfacedObject, ICar)
   private
     cFirm   : String;
     cModel  : String;
-    cEngine : String;
-    cBody   : String;
+    bEngine : String;
+    bBody   : String;
 
-    cEngineRotation : Boolean;
+    bEngineRotation : Boolean;
 
     function GetFirm   : String;
     function GetModel  : String;
@@ -98,7 +98,7 @@ type
 
     procedure SetHeadlight(const Value: Boolean);
 
-    constructor Create(); overload;
+    constructor Create(firm, model, engine, body: String);
   end;
 
 var
@@ -117,13 +117,13 @@ implementation
 
 { TToyota }
 
-constructor TToyota.Create();
+constructor TToyota.Create(firm, model, engine, body: String);
 begin
   inherited Create();
-   cFirm   := 'Toyota';
-   cModel  := 'Lanser';
-   cEngine := 'Disel';
-   cBody   := 'Geep';
+   cFirm   := firm;
+   cModel  := model;
+   cEngine := engine;
+   cBody   := body;
    //Self.cEngineRotation := false;
 end;
 
@@ -153,11 +153,11 @@ procedure TToyota.SetHeadlight(const Value: Boolean);
 begin
    if Value then
    begin
-     ShowMessage('Фары Горят');
+     ShowMessage('Р¤Р°СЂС‹ Р“РѕСЂСЏС‚');
    end;
    if Not(Value) then
    begin
-     ShowMessage('Фары Не горят');
+     ShowMessage('Р¤Р°СЂС‹ РќРµ РіРѕСЂСЏС‚');
    end;
 end;
 
@@ -179,28 +179,28 @@ end;
 
 { TBygatti }
 
-constructor TBygatti.Create();
+constructor TBygatti.Create(firm, model, engine, body: String);
 begin
    cFirm   := 'Bygatti';
    cModel  := 'Veyron';
-   cEngine := 'Hibrid';
-   cBody   := 'Sport car';
-   cEngineRotation := false;
+   bEngine := 'Hibrid';
+   bBody   := 'Sport car';
+   bEngineRotation := false;
 end;
 
 function TBygatti.GetBody: String;
 begin
-    Result := cBody;
+    Result := bBody;
 end;
 
 function TBygatti.GetEngine: String;
 begin
-  Result := cEngine;
+  Result := bEngine;
 end;
 
 function TBygatti.GetEngineRotation: Boolean;
 begin
-  Result := cEngineRotation;
+  Result := bEngineRotation;
 end;
 
 function TBygatti.GetFirm: String;
@@ -222,24 +222,24 @@ procedure TBygatti.SetHeadlight(const Value: Boolean);
 begin
    if Value then
    begin
-     ShowMessage('Фары Горят');
+     ShowMessage('Р¤Р°СЂС‹ Р“РѕСЂСЏС‚');
    end;
    if Not(Value) then
    begin
-     ShowMessage('Фары Не горят');
+     ShowMessage('Р¤Р°СЂС‹ РќРµ РіРѕСЂСЏС‚');
    end;
 end;
 
 procedure TBygatti.SetPedalPressure(const Value: Boolean);
 begin
-  cEngineRotation := Value;
+  bEngineRotation := Value;
 end;
 
 procedure TForm1.BtnCreateBugattiClick(Sender: TObject);
 begin
   Toyota := nil;
-  Bugatti := TBygatti.Create();
-  ShowMessageFmt('Мой автомобиль %s, модель %s, форма кузова %s, двигатель %s.',
+  Bugatti := TBygatti.Create('0','1','2','4');
+  ShowMessageFmt('РњРѕР№ Р°РІС‚РѕРјРѕР±РёР»СЊ %s, РјРѕРґРµР»СЊ %s, С„РѕСЂРјР° РєСѓР·РѕРІР° %s, РґРІРёРіР°С‚РµР»СЊ %s.',
   [Bugatti.GetFirm, Bugatti.GetModel, Bugatti.GetBody, Bugatti.GetEngine]);
   IsStarted := false;
   IsMoved := false;
@@ -250,15 +250,12 @@ end;
 procedure TForm1.BtnCreateToyotaClick(Sender: TObject);
 begin
   Bugatti := nil;
-  Toyota := TToyota.Create();
-  ShowMessageFmt('Мой автомобиль %s, модель %s, форма кузова %s, двигатель %s.',
+  Toyota := TToyota.Create('4','5','6','7');
+  ShowMessageFmt('РњРѕР№ Р°РІС‚РѕРјРѕР±РёР»СЊ %s, РјРѕРґРµР»СЊ %s, С„РѕСЂРјР° РєСѓР·РѕРІР° %s, РґРІРёРіР°С‚РµР»СЊ %s.',
   [Toyota.GetFirm, Toyota.GetModel, Toyota.GetBody, Toyota.GetEngine]);
   IsStarted := false;
   IsMoved := false;
   IsOn := false;
-  BtnStartEngine.Enabled := true;
-  BtnMoveStop.Enabled := true;
-  BtnOnOffHeadlight.Enabled := true;
 
 end;
 
@@ -267,22 +264,18 @@ procedure TForm1.BtnStartEngineClick(Sender: TObject);
 begin
   if Not(Toyota = nil) then
   begin
-    if Not(IsStarted) and Not(IsMoved) then
+    if Not(IsStarted) then
     begin
      Toyota.SetPedalPressure(true);
-     ShowMessage('Двигатель запущен');
-     Form1.BtnStartEngine.Caption := 'Остановить Двигатель';
-     IsStarted := true;
+     ShowMessage('Р”РІРёРіР°С‚РµР»СЊ Р·Р°РїСѓС‰РµРЅ');
+     Form1.BtnStartEngine.Caption := 'РћСЃС‚Р°РЅРѕРІРёС‚СЊ Р”РІРёРіР°С‚РµР»СЊ';
     end
     else
-    if IsStarted and Not(IsMoved) then
     begin
      Toyota.SetPedalPressure(false);
-     ShowMessage('Двигатель остановлен');
-     Form1.BtnStartEngine.Caption := 'Запустить Двгатель';
-     IsStarted := false;
-    end
-    else ShowMessage('Остановите трфнспорт');
+     ShowMessage('Р”РІРёРіР°С‚РµР»СЊ РѕСЃС‚Р°РЅРѕРІР»РµРЅ');
+     Form1.BtnStartEngine.Caption := 'Р—Р°РїСѓСЃС‚РёС‚СЊ Р”РІРіР°С‚РµР»СЊ';
+    end;
   end;
 
   if Not(Bugatti = nil) then
@@ -290,16 +283,14 @@ begin
     if Not(IsStarted) then
     begin
      Bugatti.SetPedalPressure(true);
-     ShowMessage('Двигатель запущен');
-     Form1.BtnStartEngine.Caption := 'Остановить Двигатель';
-     IsStarted := true;
+     ShowMessage('Р”РІРёРіР°С‚РµР»СЊ Р·Р°РїСѓС‰РµРЅ');
+     Form1.BtnStartEngine.Caption := 'РћСЃС‚Р°РЅРѕРІРёС‚СЊ Р”РІРёРіР°С‚РµР»СЊ';
     end
     else
     begin
      Bugatti.SetPedalPressure(false);
-     ShowMessage('Двигатель остановлен');
-     Form1.BtnStartEngine.Caption := 'Запустить Двгатель';
-     IsStarted := false;
+     ShowMessage('Р”РІРёРіР°С‚РµР»СЊ РѕСЃС‚Р°РЅРѕРІР»РµРЅ');
+     Form1.BtnStartEngine.Caption := 'Р—Р°РїСѓСЃС‚РёС‚СЊ Р”РІРіР°С‚РµР»СЊ';
     end;
   end;
 

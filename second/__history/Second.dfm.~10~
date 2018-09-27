@@ -37,7 +37,6 @@ object Form1: TForm1
     Width = 129
     Height = 25
     Caption = #1047#1072#1087#1091#1089#1090#1080#1090#1100' '#1044#1074#1080#1075#1072#1090#1077#1083#1100
-    Enabled = False
     TabOrder = 2
     OnClick = BtnStartEngineClick
   end
@@ -47,7 +46,6 @@ object Form1: TForm1
     Width = 129
     Height = 25
     Caption = #1055#1086#1077#1093#1072#1083#1080
-    Enabled = False
     TabOrder = 3
   end
   object BtnOnOffHeadlight: TButton
@@ -56,7 +54,6 @@ object Form1: TForm1
     Width = 129
     Height = 25
     Caption = #1047#1072#1078#1077#1095#1100' '#1060#1072#1088#1099
-    Enabled = False
     TabOrder = 4
   end
 end

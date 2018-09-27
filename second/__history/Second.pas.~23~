@@ -1,0 +1,128 @@
+﻿unit Second;
+
+interface
+
+uses
+  Windows, Messages, SysUtils, Variants, Classes, Graphics, Controls, Forms,
+  Dialogs, StdCtrls;
+
+type
+  {TForm1}
+  TForm1 = class(TForm)
+  private
+    { Private declarations }
+  public
+    { Public declarations }
+  end;
+
+  { ICar Interface}
+  ICar = Interface(IInterface)
+   //мотоды доступа к полям для чтения
+    function GetFirm   : String;
+    function GetModel  : String;
+    function GetEngine : String;
+    function GetBody   : String;
+    // записи
+    procedure SetFirm(const Value: String);
+    procedure SetModel(const Value: String);
+    procedure SetEngine(const Value: String);
+    procedure SetBody(const Value: String);
+    //4 поля
+    property firm   : String read GetFirm write SetFirm;
+    property model  : String read GetFirm write SetFirm;
+    property engine : String read GetEngine write SetEngine;
+    property body   : String read GetBody write SetBody;
+    //3 метода
+    function GetEngineRotation(const Value: Boolean) : Boolean;
+    function GetMove(const Value: Boolean)           : Double;
+    function GetHeadlight(const Value: Boolean)      : Boolean;
+  end;
+
+  { TCar Class }
+  TCar = Class(TInterfacedObject, ICar)
+  private
+    cFirm      : String;
+    cModel     : String;
+    cEngine    : String;
+    cBody      : String;
+    cColorBody : Integer;
+    function GetBody      : String;
+    function GetEngine    : String;
+    function GetFilm      : String;
+    function GetColorBody : Integer;
+    procedure SetBody(const Value: String);
+    procedure SetEngine(const Value: String);
+    procedure SetMark(const Value: String);
+    procedure SetColorBody(const Value: Integer);
+
+  public
+    property mark      : String read GetFilm write SetMark;
+    property model     : String read GetFilm write SetMark;
+    property engine    : String read GetEngine write SetEngine;
+    property body      : String read GetBody write SetBody;
+    property colorBody : Integer read GetColorBody write SetColorBody;
+
+    constructor Create(mark, model, enjine, body: String; colorBody: Integer);
+  end;
+
+
+var
+  Form1: TForm1;
+
+implementation
+
+{$R *.dfm}
+
+
+{ TCar }
+
+constructor TCar.Create(mark, model, enjine, body: String; colorBody: Integer);
+begin
+   cFirm := mark;
+   cModel := model;
+   cEngine := enjine;
+   cBody := body;
+   cColorBody := colorBody;
+end;
+
+function TCar.GetBody: String;
+begin
+  Result := cBody;
+end;
+
+function TCar.GetColorBody: String;
+begin
+  Result := cColorBody;
+end;
+
+function TCar.GetEngine: String;
+begin
+  Result := cEngine;
+end;
+
+function TCar.GetFilm: String;
+begin
+  Result := cFirm;
+end;
+
+procedure TCar.SetBody(const Value: String);
+begin
+
+end;
+
+procedure TCar.SetColorBody(const Value: String);
+begin
+
+end;
+
+procedure TCar.SetEngine(const Value: String);
+begin
+
+end;
+
+procedure TCar.SetMark(const Value: String);
+begin
+
+end;
+
+end.
