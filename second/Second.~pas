@@ -27,7 +27,26 @@ type
     { Public declarations }
   end;
 
+  ICar = Interface(IInterface)
+    //4 поля
+    property Model     : String read GetModel write SetModel;
+    property Engine    : String read GetEngine write SetEngine;
+    property Body      : String read GetBody write SetBody;
+    property ColorBody : String read GetColorBody write SetColorBody;
+    //методы доступа к полям для чтения и записи
+    function GetModel  : String;
+    function GetEngine : String;
+    function GetBody   : String;
+    procedure SetModel(const Value: String);
+    procedure SetEngine(const Value: String);
+    procedure SetBody(const Value: String);
+    procedure SetColorBody(const Value: String);
+    //3 метода
+    function GetEngineRotation : Boolean;
+    function GetMove           : Double;
+    function GetHeadlight      : Boolean;
 
+  end;
 
   TAutomobile = class
   private
