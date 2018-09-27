@@ -29,7 +29,7 @@ type
 
 
 
-  TCar = class
+  TAutomobile = class
   private
     Engine : String;
     Coachbuilder : String;
@@ -78,7 +78,7 @@ implementation
 
 { TCar }
 
-constructor TCar.Create(Engine, Coachbuilder: String; Chassis: Integer);
+constructor TAutomobile.Create(Engine, Coachbuilder: String; Chassis: Integer);
 begin
   SetEngine(Engine);
   SetCoachbuilder(Coachbuilder);
