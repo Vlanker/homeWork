@@ -20,34 +20,32 @@ type
     procedure BtnMoveClick(Sender: TObject);
     procedure BtnHeadlightClick(Sender: TObject);
     procedure BtnCreateTruckClick(Sender: TObject);
+    procedure BtnLoadUnloadTrailerClick(Sender: TObject);
   private
     { Private declarations }
   public
     { Public declarations }
   end;
 
-  TAutomobile = class
+
+
+  TCar = class
   private
     Engine : String;
     Coachbuilder : String;
     Chassis : Integer;
+  public
+    IsStarterEngine, IsMoved, Headlight: Boolean;
 
+    constructor Create(Engine, Coachbuilder : String;
+                       Chassis : Integer); overload;
+    
     function GetEngine: String;
     procedure SetEngine(const Value: String);
     function GetCoachbuilder: String;
     procedure SetCoachbuilder(const Value: String);
     function GetChassis: Integer;
     procedure SetChassis(const Value: Integer);
-  public
-    IsStarterEngine, IsMoved, Headlight: Boolean;
-    property Engines: String read GetEngine
-                             write SetEngine;
-    property Coachbuilders: String read GetCoachbuilder
-                                   write SetCoachbuilder;
-    property Chassiss: Integer read GetChassis
-                               write SetChassis;
-    constructor Create(Engine, Coachbuilder : String;
-                       Chassis : Integer); overload;
 
     function StartStopEngine() : Boolean; virtual;
     function MoveAutomobile() : Boolean; virtual;
@@ -70,26 +68,21 @@ type
 
 var
   Form1: TForm1;
-  Automobile : TAutomobile = nil;
+  Automobile : Car = nil;
   Truck : TTruck = nil;
 
 
 implementation
 
 {$R *.dfm}
-{ TAutomobile }
 
-{ TAutomobile }
+{ TCar }
 
-constructor TAutomobile.Create(Engine, Coachbuilder: String; Chassis: Integer);
+constructor TCar.Create(Engine, Coachbuilder: String; Chassis: Integer);
 begin
-  self.Engine := Engine;
-  self.Coachbuilder := Coachbuilder;
-  self.Chassis := Chassis;
-
-  ShowMessage('Создан Автомобиль: Двигатель-' + Engine +
-              '; Кузов-' + Coachbuilder +
-              '; Шасси-' + IntToStr(Chassis));
+  SetEngine(Engine);
+  SetCoachbuilder(Coachbuilder);
+  SetChassis(Chassis);
 end;
 
 function TAutomobile.GetChassis: Integer;
@@ -128,7 +121,8 @@ begin
   begin
   //start
     IsStarterEngine := true;
-    ShowMessage('Двигатель Запущен!');
+    ShowMessage(GetEngine + ' Запущен!');
+    Form1.BtnStartStopEngine.Caption := 'Остановить ' + GetEngine;
     Result :=  true;
   end
   else
@@ -137,14 +131,15 @@ begin
     begin
      //stop
       IsStarterEngine := false;
-      ShowMessage('Двигатель Остановлен!');
+      ShowMessage(GetEngine + ' Остановлен!');
+      Form1.BtnStartStopEngine.Caption := 'Запустить ' + GetEngine;
       Result := false;
     end;
   end;
 
   if IsMoved then
     begin
-      ShowMessage('Остановите Автомобиль');
+      ShowMessage('Остановите Транспорт');
       Result := true;
     end
 
@@ -154,13 +149,15 @@ function TAutomobile.MoveAutomobile(): Boolean;
 begin
   if Not(IsStarterEngine) then
   begin
-    ShowMessage('Не может двигаться! Запустить Двигатель');
+    ShowMessage('Не может двигаться! Запустить ' + GetEngine);
+
     Result := false;
   end;
 
   if IsStarterEngine and Not(IsMoved) then
   begin
-    ShowMessage('Автомобиль Движется!');
+    ShowMessage('Транспорт Движется!');
+    Form1.BtnMove.Caption := 'Остановить';
     IsMoved := true;
     Result := true;
   end
@@ -168,7 +165,8 @@ begin
   begin
     if IsStarterEngine and IsMoved then
     begin
-      ShowMessage('Автомобиль Остановлен!');
+      ShowMessage('Транспорт Остановлен!');
+      Form1.BtnMove.Caption := 'Двигаться';
       IsMoved := false;
       Result := false;
     end;
@@ -178,56 +176,55 @@ end;
 
 procedure TForm1.BtnStartStopEngineClick(Sender: TObject);
 begin
-  if Not(Automobile = nil) then
-  begin
-  if Automobile.StartStopEngine then
-    BtnStartStopEngine.Caption := 'Остановить Двигатель'
-  else
-     BtnStartStopEngine.Caption := 'Запустить Двигатель';
-  end;
+  if Not(Automobile = nil) then Automobile.StartStopEngine;
 
-  if Not(Truck = nil) then
-  begin
-  if Truck.StartStopEngine then
-    BtnStartStopEngine.Caption := 'Остановить Двигатель'
-  else
-     BtnStartStopEngine.Caption := 'Запустить Двигатель';
-  end;
+  if Not(Truck = nil) then Truck.StartStopEngine;
 end;
 
 procedure TForm1.BtnCreateTruckClick(Sender: TObject);
 begin
-     Truck := TTruck.Create('Дизельный мотор','Кабина', 6, 'Прицеп 10 000');
+  Truck := TTruck.Create('Дизельный мотор','Кабина', 6, 'Прицеп 10 000');
 
-     (Truck as TAutomobile).IsStarterEngine := false;
-     Truck.IsMoved := false;
-     Truck.Headlight := false;
-     Truck.IsLoaded := false;
+  ShowMessage('Создан Грузовик: Двигатель-' + Truck.GetEngine +
+             '; Кузов-' + Truck.GetCoachbuilder +
+             '; Шасси-' + IntToStr(Truck.GetChassis) +
+             '; Прицеп-' + Truck.Trailer);
 
-     if Not(Automobile = nil) then
-     begin
-       Automobile := nil;
-       BtnCreate.Caption := 'Создать Автомобиль';
-       BtnCreate.Enabled := true;
-     end;
+  Truck.IsStarterEngine := false;
+  Truck.IsMoved := false;
+  Truck.Headlight := false;
+  Truck.IsLoaded := false;
+
+  if Not(Automobile = nil) then
+  begin
+    Automobile := nil;
+    BtnCreate.Caption := 'Создать Автомобиль';
+    BtnCreate.Enabled := true;
+  end;
 
 
-     BtnCreateTruck.Caption := 'Грузовик Создан';
-     BtnCreateTruck.Enabled := false;
+  BtnCreateTruck.Caption := 'Грузовик Создан';
+  BtnCreateTruck.Enabled := false;
 
-     BtnLoadUnloadTrailer.Caption := 'Загрузить Прицеп';
-     BtnLoadUnloadTrailer.Enabled := true;
-     BtnStartStopEngine.Caption := 'Запустить Двигатель';
-     BtnStartStopEngine.Enabled := true;
-     BtnMove.Caption := 'Двигаться';
-     BtnMove.Enabled := true;
-     BtnHeadlight.Caption := 'Зажечь Фары';
-     BtnHeadlight.Enabled := true;
+  BtnLoadUnloadTrailer.Caption := 'Зацепить ' + Truck.Trailer;
+  BtnLoadUnloadTrailer.Width :=  145;
+  BtnLoadUnloadTrailer.Enabled := true;
+  BtnStartStopEngine.Caption := 'Запустить ' + Truck.GetEngine;
+  BtnStartStopEngine.Width := 165;
+  BtnStartStopEngine.Enabled := true;
+  BtnMove.Caption := 'Двигаться';
+  BtnMove.Enabled := true;
+  BtnHeadlight.Caption := 'Зажечь Фары';
+  BtnHeadlight.Enabled := true;
 end;
 
 procedure TForm1.BtnCreateClick(Sender: TObject);
 begin
     Automobile := TAutomobile.Create('Мотор', 'Кузов', 4);
+    
+    ShowMessage('Создан Автомобиль: Двигатель-' + Automobile.GetEngine +
+              '; Кузов-' + Automobile.GetCoachbuilder +
+              '; Шасси-' + IntToStr(Automobile.GetChassis));
 
     Automobile.IsStarterEngine := false;
     Automobile.IsMoved := false;
@@ -246,8 +243,10 @@ begin
     BtnCreate.Enabled := false;
 
     BtnLoadUnloadTrailer.Caption := 'Загрузить Прицеп';
+    BtnLoadUnloadTrailer.Width :=  105;
     BtnLoadUnloadTrailer.Enabled := false;
-    BtnStartStopEngine.Caption := 'Запустить Двигатель';
+    BtnStartStopEngine.Caption := 'Запустить ' + Automobile.GetEngine;
+    BtnStartStopEngine.Width := 129;
     BtnStartStopEngine.Enabled := true;
     BtnMove.Caption := 'Двигаться';
     BtnMove.Enabled := true;
@@ -257,55 +256,35 @@ end;
 
 procedure TForm1.BtnMoveClick(Sender: TObject);
 begin
-  if Not(Automobile = nil) then
-  begin
-    if Automobile.MoveAutomobile() then
-      BtnMove.Caption := 'Остановиться'
-    else
-       BtnMove.Caption := 'Двигаться';
-  end;
+  if Not(Automobile = nil) then Automobile.MoveAutomobile();
 
-   if Not(Truck = nil) then
-  begin
-    if Truck.MoveAutomobile() then
-      BtnMove.Caption := 'Остановиться'
-    else
-       BtnMove.Caption := 'Двигаться';
-  end;
+  if Not(Truck = nil) then Truck.MoveAutomobile();
 end;
 
 function TAutomobile.OnOffHeadlight: Boolean;
 begin
-  if Not(Automobile.Headlight) then
+  if Not(Headlight) then
   begin
     Headlight := true;
     ShowMessage('Фары включены');
+    Form1.BtnHeadlight.Caption := 'Потушить Фары';
     Result := true;
   end
   else
   begin
     Headlight := false;
     ShowMessage('Фары выключены');
+    Form1.BtnHeadlight.Caption := 'Зажечь Фары';
     Result := false;
   end;
 end;
 
 procedure TForm1.BtnHeadlightClick(Sender: TObject);
 begin
-  if Not(Automobile = nil) then
-  begin
-    if Automobile.OnOffHeadlight then
-        BtnHeadlight.Caption := 'Потушить Фары'
-    else
-        BtnHeadlight.Caption := 'Зажечь Фары';
-   end;
-   if Not(Truck = nil) then
-  begin
-    if Truck.OnOffHeadlight then
-        BtnHeadlight.Caption := 'Потушить Фары'
-    else
-        BtnHeadlight.Caption := 'Зажечь Фары';
-   end;
+  if Not(Automobile = nil) then Automobile.OnOffHeadlight;
+
+  if Not(Truck = nil) then Truck.OnOffHeadlight;
+  
 end;
 
 { TTruck }
@@ -313,14 +292,8 @@ end;
 constructor TTruck.Create(Engine, Coachbuilder: String; Chassis: Integer;
   Trailer: String);
 begin
-  inherited Create(Engine, Coachbuilder, Chassis);
-
+  inherited Create( Engine, Coachbuilder, Chassis);
   self.Trailer := Trailer;
-
-  ShowMessage('Создан Грузовик: Двигатель-' + Engine +
-              '; Кузов-' + Coachbuilder +
-              '; Шасси-' + IntToStr(Chassis) +
-              '; Прицеп-' + Trailer);
 end;
 
 function TTruck.LoadUnloadTrailer: Boolean;
@@ -328,20 +301,16 @@ begin
     if Not(IsLoaded) and Not(IsStarterEngine) and Not(IsMoved) then
     begin
       IsLoaded := true;
-      ShowMessage ('Прицеп загружен');
-      Result := true;
-    end;
 
-    if IsLoaded and Not(IsStarterEngine) and Not(IsMoved) then
+      ShowMessage (Trailer + ' зацеплен');
+      Form1.BtnLoadUnloadTrailer.Caption := 'Разцепить ' + Truck.Trailer;
+      Result := true;
+    end
+    else if IsLoaded and Not(IsStarterEngine) and Not(IsMoved) then
     begin
       IsLoaded := false;
-      ShowMessage ('Прицеп разгружен');
-      Result := false;
-    end;
-
-    if IsStarterEngine then
-    begin
-      ShowMessage ('Заглушите Двигатель');
+      ShowMessage (Trailer + ' разцеплен');
+      Form1.BtnLoadUnloadTrailer.Caption := 'Зацепить ' + Truck.Trailer;
       Result := false;
     end;
 
@@ -373,6 +342,11 @@ end;
 function TTruck.StartStopEngine: Boolean;
 begin
   inherited StartStopEngine;
+end;
+
+procedure TForm1.BtnLoadUnloadTrailerClick(Sender: TObject);
+begin
+ Truck.LoadUnloadTrailer();
 end;
 
 end.
