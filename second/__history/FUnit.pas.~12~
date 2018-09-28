@@ -1,0 +1,292 @@
+unit FUnit;
+
+interface
+
+uses
+  Winapi.Windows, Winapi.Messages, System.SysUtils, System.Variants, System.Classes, Vcl.Graphics,
+  Vcl.Controls, Vcl.Forms, Vcl.Dialogs, Vcl.StdCtrls;
+
+type
+  TForm1 = class(TForm)
+    BtnCreateToyota: TButton;
+    BtnCreateHonda: TButton;
+    BtnRotateEngine: TButton;
+    BtnMove: TButton;
+    BtnHeadlight: TButton;
+    procedure BtnCreateToyotaClick(Sender: TObject);
+    procedure BtnCreateHondaClick(Sender: TObject);
+    procedure BtnRotateEngineClick(Sender: TObject);
+    procedure BtnHeadlightClick(Sender: TObject);
+    procedure BtnMoveClick(Sender: TObject);
+
+  private
+    { Private declarations }
+  public
+    { Public declarations }
+  end;
+
+
+  ICar = interface(IInterface)
+    function GetFirm   : String;
+    function GetModel  : String;
+    function GetEngine : String;
+    function GetBody   : String;
+
+    property firm   : String read GetFirm;
+    property model  : String read GetFirm;
+    property engine : String read GetEngine;
+    property body   : String read GetBody;
+
+    function GetEngineRotation() : Boolean;
+    function GetMove()           : Boolean;
+
+    procedure SetPedalPressure(const Value: Boolean);
+  end;
+
+  TToyota = class(TInterfacedObject, ICar)
+  private
+    fFirm   : String;
+    fModel  : String;
+    fEngine : String;
+    fBody   : String;
+
+    fEngineRotation : Boolean;
+
+    function GetFirm   : String;
+    function GetModel  : String;
+    function GetBody   : String;
+    function GetEngine : String;
+  public
+    property firm   : String read GetFirm;
+    property model  : String read GetModel;
+    property engine : String read GetEngine;
+    property body   : String read GetBody;
+
+    function GetEngineRotation() : Boolean;
+    function GetMove()           : Boolean;
+    procedure SetPedalPressure(const Value: Boolean);
+
+    procedure SetHeadlight(const Value: Boolean);
+
+    constructor Create(); overload;
+  end;
+
+  THonda = Class(TInterfacedObject, ICar)
+  private
+    cFirm   : String;
+    cModel  : String;
+    cEngine : String;
+    cBody   : String;
+
+    cEngineRotation : Boolean;
+
+    function GetFirm   : String;
+    function GetModel  : String;
+    function GetBody   : String;
+    function GetEngine : String;
+
+  public
+    property firm   : String read GetFirm;
+    property model  : String read GetModel;
+    property engine : String read GetEngine;
+    property body   : String read GetBody;
+
+    function GetEngineRotation() : Boolean;
+    function GetMove()           : Boolean;
+    procedure SetPedalPressure(const Value: Boolean);
+
+    procedure SetHeadlight(const Value: Boolean);
+
+    constructor Create(); overload;
+  end;
+
+
+var
+  Form1: TForm1;
+  Toyota: TToyota = nil;
+  Honda: THonda = nil;
+
+implementation
+
+{$R *.dfm}
+
+procedure TForm1.BtnCreateHondaClick(Sender: TObject);
+begin
+  //***
+end;
+
+procedure TForm1.BtnCreateToyotaClick(Sender: TObject);
+begin
+  Toyota := TToyota.Create();
+  ShowMessageFmt('Вы создали %s: модель - %s, тип двигателя - %s, кузов - %s.' +
+  ' Запустите двигатель и тогда сможете начать движение. Так же, можно включить фары.',
+  [Toyota.fFirm, Toyota.fModel, Toyota.fEngine, Toyota.fBody]);
+end;
+
+
+
+procedure TForm1.BtnHeadlightClick(Sender: TObject);
+begin
+   if Not(Toyota = nil) then Toyota.SetHeadlight(true);
+   if Not(Honda = nil) then Honda.SetHeadlight(true);
+end;
+
+procedure TForm1.BtnMoveClick(Sender: TObject);
+begin
+  if Not(Toyota = nil) then Toyota.GetMove;
+   if Not(Toyota = nil) then Toyota.GetMove;
+end;
+
+procedure TForm1.BtnRotateEngineClick(Sender: TObject);
+begin
+ if Not(Toyota = nil) then Toyota.SetPedalPressure(true);
+end;
+
+{ TToyota }
+
+constructor TToyota.Create();
+begin
+   fFirm   := 'Toyota';
+   fModel  := 'Lanser';
+   fEngine := 'Disel';
+   fBody   := 'Geep';
+   fEngineRotation := false;
+end;
+
+function TToyota.GetBody: String;
+begin
+   Result := fBody;
+end;
+
+function TToyota.GetEngine: String;
+begin
+  Result := fEngine;
+end;
+
+function TToyota.GetEngineRotation: Boolean;
+begin
+  Result := fEngineRotation;
+end;
+
+function TToyota.GetFirm: String;
+begin
+  Result := fFirm;
+end;
+
+function TToyota.GetModel: String;
+begin
+  Result := fModel;
+end;
+
+function TToyota.GetMove: Boolean;
+begin
+
+  if Not(GetEngineRotation) then
+    begin
+      ShowMessage('Запустите двигатель, чтобы начать движение.');
+    end
+    else
+    begin
+      ShowMessage('Вы начали движение.');
+    end;
+
+  Result := GetEngineRotation;
+end;
+
+
+
+procedure TToyota.SetHeadlight(const Value: Boolean);
+begin
+  if Value then
+    ShowMessage('Фары включены');
+  if Not(Value) then
+    ShowMessage('Фары выключены');
+end;
+
+procedure TToyota.SetPedalPressure(const Value: Boolean);
+begin
+  if Value then
+  begin
+    ShowMessage('Двигатель запущен');
+    fEngineRotation := Value;
+  end;
+  if Not(Value) then
+  begin
+    ShowMessage('Двигатель остановлен');
+    fEngineRotation := Value;
+  end;
+end;
+
+{ THonda }
+
+constructor THonda.Create;
+begin
+   cFirm   := 'Toyota';
+   cModel  := 'Lanser';
+   cEngine := 'Disel';
+   cBody   := 'Geep';
+   cEngineRotation := false;
+end;
+
+function THonda.GetBody: String;
+begin
+  Result := cBody;
+end;
+
+function THonda.GetEngine: String;
+begin
+  Result := cEngine;
+end;
+
+function THonda.GetEngineRotation: Boolean;
+begin
+  Result := cEngineRotation;
+end;
+
+function THonda.GetFirm: String;
+begin
+  Result := cFirm;
+end;
+
+function THonda.GetModel: String;
+begin
+  Result := cModel
+end;
+
+function THonda.GetMove: Boolean;
+begin
+  if Not(GetEngineRotation) then
+    begin
+      ShowMessage('Запустите двигатель, чтобы начать движение.');
+    end
+    else
+    begin
+      ShowMessage('Вы начали движение.');
+    end;
+
+  Result := GetEngineRotation;
+end;
+
+procedure THonda.SetHeadlight(const Value: Boolean);
+begin
+  if Value then
+    ShowMessage('Фары включены');
+  if Not(Value) then
+    ShowMessage('Фары выключены');
+end;
+
+procedure THonda.SetPedalPressure(const Value: Boolean);
+begin
+  if Value then
+  begin
+    ShowMessage('Двигатель запущен');
+    cEngineRotation := Value;
+  end;
+  if Not(Value) then
+  begin
+    ShowMessage('Двигатель остановлен');
+    cEngineRotation := Value;
+  end;
+end;
+
+end.
