@@ -1,0 +1,100 @@
+unit Unit1;
+
+interface
+
+uses
+  Winapi.Windows, Winapi.Messages, System.SysUtils, System.Variants, System.Classes, Vcl.Graphics,
+  Vcl.Controls, Vcl.Forms, Vcl.Dialogs, Vcl.StdCtrls;
+
+type
+  TForm1 = class(TForm)
+    MOutput: TMemo;
+    procedure FormCreate(Sender: TObject);
+  private
+    { Private declarations }
+  public
+    { Public declarations }
+  end;
+
+var
+  Form1: TForm1;
+
+implementation
+
+{$R *.dfm}
+
+procedure TForm1.FormCreate(Sender: TObject);
+var
+  I : Integer;
+  Disklist:DWORD;
+  Letter:Char;
+  Outstring: String;
+  AmtFree: Int64;
+  Total:   Int64;
+begin
+
+//ld := GetLogicalDrives;
+//for i := 0 to 25 do
+//begin
+//  AmtFree := DiskFree(i);
+//  Total := DiskSize(i);
+//  if (ld and (1 shl i)) <> 0 then
+//    MOutput.Lines.Add('Диск ('+Char(Ord('A') + i) + ':\');
+//end;
+
+
+//   for i := 2 to 6 do
+//  begin
+//    AmtFree := DiskFree(i);
+//    Total := DiskSize(i);
+//
+//
+//    if AmtFree >= 0 then
+//      MOutput.Lines.Add('Диск ('+ Chr(i + 64) + ':) ' +
+//                        FloatToStrF(AmtFree, ffNumber, 20, 0) +
+//                        ' свободно из ' +
+//                         FloatToStrF(Total, ffNumber, 20, 0)+)
+//     else MOutput.Lines.Add('Диск '+ Chr(i+64)+' Диск не существует');
+//  end;
+//
+//AmtFree := DiskFree(0);
+//  Total := DiskSize(0);
+//  S := IntToStr((AmtFree  * 100) div Total) + ' percent of the space on drive 0 is free: ' + IntToStr(AmtFree div 1024) + ' Kbytes free. ';
+//  MOutput.Lines.Add(S);
+
+  Caption:='Список дисков';
+
+  Disklist:= GetLogicaldrives;
+  Letter:= 'A';
+  I := 1;
+
+  while (Disklist>0) do begin
+    AmtFree := DiskFree(I);
+    Total := DiskSize(I);
+    if Odd(Disklist) then begin
+      case GetDriveType(Pchar(Letter + ':\')) of
+        0: Outstring :='[невозможно определить тип] ';
+        1: Outstring :='[не существует корневая папка] ';
+        DRIVE_REMOVABLE:Outstring:='USB - Накопитель ';
+        DRIVE_FIXED:Outstring:='Локальный диск ';
+        DRIVE_REMOTE:Outstring:='Сетевой диск ';
+        DRIVE_CDROM:Outstring:='Дисковод ';
+        DRIVE_RAMDISK:Outstring:='RAM диск ';
+      end;
+
+      Outstring:= Outstring + '(' + Letter +':) ' +
+                  FloatToStrF(AmtFree, ffNumber, 20, 0) +
+                  ' свободно из ' +
+                  FloatToStrF(Total, ffNumber, 20, 0);
+      MOutput.Lines.Add(Outstring);
+    end;
+
+  Disklist:= Disklist shr 1;
+  Inc(Letter);
+  Inc(I)
+  end;
+end;
+
+
+
+end.

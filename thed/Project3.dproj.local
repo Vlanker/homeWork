@@ -1,0 +1,9 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<BorlandProject>
+	<Transactions>
+    <Transaction>1899.12.30 00:00:00.000.168,=K:\Repository\Delphy\Unit1.pas</Transaction>
+    <Transaction>1899.12.30 00:00:00.000.023,K:\Repository\Delphy\homeWork\thed\Unit1.dfm=K:\Repository\Delphy\Unit1.dfm</Transaction>
+    <Transaction>1899.12.30 00:00:00.000.709,K:\Repository\Delphy\homeWork\thed\Project3.dproj=K:\Repository\Delphy\Project1.dproj</Transaction>
+    <Transaction>1899.12.30 00:00:00.000.023,K:\Repository\Delphy\homeWork\thed\Unit1.pas=K:\Repository\Delphy\Unit1.pas</Transaction>
+  </Transactions>
+</BorlandProject>

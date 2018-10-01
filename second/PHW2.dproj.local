@@ -1,11 +1,11 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <BorlandProject>
-  <Transactions>
-    <Transaction>2018.09.28 21:23:19.432,=K:\Repository\Delphy\Unit1.pas</Transaction>
-    <Transaction>2018.09.28 21:32:29.323,K:\Repository\Delphy\a\FUnit.dfm=K:\Repository\Delphy\Unit1.dfm</Transaction>
-    <Transaction>2018.09.28 21:32:29.323,K:\Repository\Delphy\a\FUnit.pas=K:\Repository\Delphy\Unit1.pas</Transaction>
-    <Transaction>2018.09.28 21:32:46.763,K:\Repository\Delphy\a\PHW2.dproj=K:\Repository\Delphy\Project1.dproj</Transaction>
-    <Transaction>2018.09.28 21:33:28.721,=K:\Repository\Delphy\a\Unit1.pas</Transaction>
-    <Transaction>2018.09.28 21:34:02.774,K:\Repository\Delphy\a\ICar.pas=K:\Repository\Delphy\a\Unit1.pas</Transaction>
+	<Transactions>
+    <Transaction>1899.12.30 00:00:00.000.763,K:\Repository\Delphy\a\PHW2.dproj=K:\Repository\Delphy\Project1.dproj</Transaction>
+    <Transaction>1899.12.30 00:00:00.000.721,=K:\Repository\Delphy\a\Unit1.pas</Transaction>
+    <Transaction>1899.12.30 00:00:00.000.323,K:\Repository\Delphy\a\FUnit.dfm=K:\Repository\Delphy\Unit1.dfm</Transaction>
+    <Transaction>1899.12.30 00:00:00.000.432,=K:\Repository\Delphy\Unit1.pas</Transaction>
+    <Transaction>1899.12.30 00:00:00.000.774,K:\Repository\Delphy\a\ICar.pas=K:\Repository\Delphy\a\Unit1.pas</Transaction>
+    <Transaction>1899.12.30 00:00:00.000.323,K:\Repository\Delphy\a\FUnit.pas=K:\Repository\Delphy\Unit1.pas</Transaction>
   </Transactions>
 </BorlandProject>

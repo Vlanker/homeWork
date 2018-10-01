@@ -50,13 +50,14 @@ type
     fEngine : String;
     fBody   : String;
 
-    fEngineRotation : Boolean;
+
 
     function GetFirm   : String;
     function GetModel  : String;
     function GetBody   : String;
     function GetEngine : String;
   public
+    fEngineRotation : Boolean;
     property firm   : String read GetFirm;
     property model  : String read GetModel;
     property engine : String read GetEngine;
@@ -78,7 +79,7 @@ type
     fEngine : String;
     fBody   : String;
 
-    fEngineRotation : Boolean;
+
 
     function GetFirm   : String;
     function GetModel  : String;
@@ -86,6 +87,7 @@ type
     function GetEngine : String;
 
   public
+    fEngineRotation : Boolean;
     property firm   : String read GetFirm;
     property model  : String read GetModel;
     property engine : String read GetEngine;
